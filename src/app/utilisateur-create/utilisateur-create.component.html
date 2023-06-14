@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 400px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0069d9;
+      border-color: #0062cc;
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+
+    .input-group-append {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h1 class="text-center">Create Utilisateur</h1>
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <div class="form-group">
+      <label for="nomUtilisateur">Nom Utilisateur</label>
+      <input type="text" class="form-control" id="nomUtilisateur" [(ngModel)]="utilisateur.nomUtilisateur"
+             name="nomUtilisateur" required #nomUtilisateur="ngModel">
+      <div *ngIf="nomUtilisateur.invalid && (nomUtilisateur.dirty || nomUtilisateur.touched)"
+           class="text-danger">Nom Utilisateur is required.</div>
+    </div>
+    <div class="form-group">
+      <label for="motDePasse">Mot de Passe</label>
+      <div class="input-group">
+        <input type="password" class="form-control" id="motDePasse" [(ngModel)]="utilisateur.motDePasse"
+               name="motDePasse" required #motDePasse="ngModel">
+        <div class="input-group-append" onclick="togglePassword()">
+            <span class="input-group-text">
+              <i class="fa fa-eye" [class.fa-eye-slash]="passwordVisible"></i>
+            </span>
+        </div>
+      </div>
+      <div *ngIf="motDePasse.invalid && (motDePasse.dirty || motDePasse.touched)"
+           class="text-danger">Mot de Passe is required.</div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="userForm.invalid">Create</button>
+  </form>
+</div>
+
+<script>
+  let passwordVisible = false;
+
+  function togglePassword() {
+    const passwordInput = document.getElementById("motDePasse");
+    const icon = document.querySelector(".input-group-append i");
+    passwordVisible = !passwordVisible;
+
+    if (passwordVisible) {
+      passwordInput.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      passwordInput.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+</script>
+</body>
+
+</html>

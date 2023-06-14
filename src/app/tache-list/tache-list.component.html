@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <h2>Liste des tâches</h2>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Description</th>
+      <th>Date d'échéance</th>
+      <th>Est Términé</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let tache of taches">
+      <td>{{ tache.titre }}</td>
+      <td>{{ tache.description }}</td>
+      <td>{{ tache.dateEcheance | date }}</td>
+      <td>
+        <input type="checkbox" [(ngModel)]="tache.estTerminee" (change)="updateTache(tache)">
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteTache(tache)">Supprimer</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

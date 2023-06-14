@@ -1,0 +1,103 @@
+<style>
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table thead th {
+    background-color: #f8f9fa;
+    color: #000;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+
+  .table tbody tr:hover {
+    background-color: #e9ecef;
+  }
+
+  .header-row {
+    background-color: #343a40;
+    color: #fff;
+  }
+
+  .second-row {
+    background-color: #f8f9fa;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+
+  .btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  .btn i {
+    margin-right: 5px;
+  }
+
+</style>
+
+<div class="container">
+  <table class="table">
+    <thead>
+    <tr class="header-row">
+      <th>#</th>
+      <th>Nom d'Utilisateur</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let utilisateur of utilisateurs; let i = index">
+      <tr [class.second-row]="i === 1">
+        <td>{{ i + 1 }}</td>
+        <td>{{ utilisateur.nomUtilisateur }}</td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteUtilisateur(utilisateur.nomUtilisateur)">
+            <i class="bi bi-trash"></i> Supprimer
+          </button>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
