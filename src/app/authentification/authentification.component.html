@@ -1,0 +1,22 @@
+<div class="container mt-4">
+  <h2>Authentification :</h2>
+</div>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container mt-4">
+  <div class="form-group">
+    <label for="nomUtilisateur">Nom Utilisateur:</label>
+    <input type="text" id="nomUtilisateur" formControlName="nomUtilisateur" class="form-control">
+  </div>
+
+  <div class="form-group">
+    <label for="motDePasse">Mot de Passe:</label>
+    <input type="password" id="motDePasse" formControlName="motDePasse" class="form-control">
+  </div>
+
+  <div class="container mt-5">
+    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Se Connecter</button>
+  </div>
+</form>
+
+<div *ngIf="successMessage" class="alert alert-success mt-4 container">Vous êtes connecté avec succès.</div>
+<div *ngIf="errorMessage" class="alert alert-danger mt-4 container">Nom d'Utilisateur ou Mot de Passe Incorrect.</div>

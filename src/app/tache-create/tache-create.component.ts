@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TacheService} from '../service/tache.service';
 import {Tache} from "../model/Tache";
+import {AuthService} from "../service/auth.service";
 
 @Component({
   selector: 'app-tache-create',
@@ -14,6 +15,7 @@ export class TacheCreateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private tacheService: TacheService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -26,7 +28,7 @@ export class TacheCreateComponent implements OnInit {
       description: ['', Validators.required],
       dateEcheance: ['', Validators.required],
       estTerminee: [false],
-      idUtilisateur: [''] // Vous devrez peut-être récupérer l'ID de l'utilisateur actuel ici
+      idUtilisateur: [this.authService.idUtilisateurConnecte] // Vous devrez peut-être récupérer l'ID de l'utilisateur actuel ici
     });
   }
 

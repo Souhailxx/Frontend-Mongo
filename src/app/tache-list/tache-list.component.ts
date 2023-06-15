@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Tache} from "../model/Tache";
-import {TacheService} from "../service/tache.service";
+import { Component, OnInit } from '@angular/core';
+import { Tache } from "../model/Tache";
+import { TacheService } from "../service/tache.service";
+import { AuthService } from "../service/auth.service";
 
 @Component({
   selector: 'app-tache-list',
@@ -9,17 +10,20 @@ import {TacheService} from "../service/tache.service";
 })
 export class TacheListComponent implements OnInit {
   taches: Tache[] = [];
+  filteredTaches: Tache[] = [];
+  searchTerm: string = '';
 
-  constructor(private tacheService: TacheService) { }
+  constructor(private tacheService: TacheService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.loadTaches();
+    this.loadTaches(this.authService.idUtilisateurConnecte);
   }
 
-  loadTaches() {
-    this.tacheService.getAllTachesByUtilisateur('1').subscribe(
+  loadTaches(idUtilisateur: string) {
+    this.tacheService.getTachesByUtilisateur(idUtilisateur).subscribe(
       (taches: Tache[]) => {
         this.taches = taches;
+        this.applySearchFilter();
       },
       (error) => {
         console.log('Une erreur s\'est produite lors du chargement des tâches :', error);
@@ -42,12 +46,28 @@ export class TacheListComponent implements OnInit {
     this.tacheService.deleteTachebyTitre(tache.titre).subscribe(
       () => {
         console.log('La tâche a été supprimée avec succès.');
-        this.loadTaches(); // Recharger la liste des tâches après la suppression
+        this.loadTaches(this.authService.idUtilisateurConnecte); // Recharger la liste des tâches après la suppression
       },
       (error) => {
         console.log('Une erreur s\'est produite lors de la suppression de la tâche :', error);
       }
     );
   }
-}
 
+  applySearchFilter() {
+    if (this.searchTerm) {
+      const searchTermLowerCase = this.searchTerm.toLowerCase();
+      this.filteredTaches = this.taches.filter(tache => tache.titre.toLowerCase().includes(searchTermLowerCase));
+    } else {
+      this.filteredTaches = this.taches;
+    }
+  }
+
+  sortTasksByDate() {
+    this.filteredTaches.sort((a, b) => {
+      const dateA = new Date(a.dateEcheance).getTime();
+      const dateB = new Date(b.dateEcheance).getTime();
+      return dateA - dateB;
+    });
+  }
+}

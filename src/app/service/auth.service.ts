@@ -1,24 +1,42 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Observable, tap} from "rxjs";
+import {Utilisateur} from "../model/Utilisateur";
+import {Tache} from "../model/Tache";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:8080';
+  private authToken!: string;
 
-  constructor(private http: HttpClient) { }
+  connected : boolean = false
+  nomUtilisateurConnecte!:string
+  idUtilisateurConnecte!:string
 
-  register(utilisateur: any) {
-    return this.http.post(`${this.apiUrl}/utilsateur/add`, utilisateur);
+  constructor(private http: HttpClient) {
   }
 
-  login(credentials: any) {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+  login(username: string, password: string): Observable<void> {
+    const credentials = btoa(`${username}:${password}`);
+    const headers = new HttpHeaders({
+      Authorization: `Basic ${credentials}`
+    });
+
+    return this.http.get<void>(`${this.apiUrl}/login`, {headers}).pipe(
+      tap(() => {
+        // Stocker le jeton d'authentification
+        this.authToken = credentials;
+      })
+    );
   }
 
-  logout() {
-    // Perform any necessary cleanup or additional API calls for logout
-    // Remove the session/token from local storage or cookie
+  getTachesUtilisateur(): Observable<Tache[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Basic ${this.authToken}`
+    });
+
+    return this.http.get<Tache[]>(`${this.apiUrl}/taches/utilisateur`, {headers});
   }
 }
